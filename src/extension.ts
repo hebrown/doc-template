@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { TemplateCodeLens } from './templateCodeLens';
 import { showTemplates } from './showTemplates';
 import { addFile } from './addTemplate';
-import { triggerUpdateDecorations, updateDecorations } from './textHighlight';
+import { deletePlaceHolder, triggerUpdateDecorations, updateDecorations } from './textHighlight';
 import { insertTemplate } from './insertTemplate';
 import { listTemplates } from './listTemplates';
 
@@ -21,7 +21,7 @@ export function activate(context: vscode.ExtensionContext) {
 					showTemplates(result, context);
 				}
 			} catch (err) {
-				vscode.window.showErrorMessage('Error')
+				vscode.window.showErrorMessage('Error');
 			}
 		})
 	);
@@ -29,22 +29,22 @@ export function activate(context: vscode.ExtensionContext) {
 	//Submenu options for the context menu
 	context.subscriptions.push(
 		vscode.commands.registerCommand('template.gettingstarted', (resource: vscode.Uri) =>{
-			addFile(resource, "gettingstarted", context)
+			addFile(resource, "gettingstarted", context);
 		})
 	);
 	context.subscriptions.push(
 		vscode.commands.registerCommand('template.howto', (resource: vscode.Uri) =>{
-			addFile(resource, "howto", context)
+			addFile(resource, "howto", context);
 		})
 	);
 	context.subscriptions.push(
 		vscode.commands.registerCommand('template.faq', (resource: vscode.Uri) =>{
-			addFile(resource, "faq", context)
+			addFile(resource, "faq", context);
 		})
 	);
 	context.subscriptions.push(
 		vscode.commands.registerCommand('template.developerguide', (resource: vscode.Uri) =>{
-			addFile(resource, "developerguide", context)
+			addFile(resource, "developerguide", context);
 		})
 	);
 
@@ -54,10 +54,10 @@ export function activate(context: vscode.ExtensionContext) {
 			try{
 				const result = await listTemplates();
 				if(result){
-					insertTemplate(result)
+					insertTemplate(result);
 				}
 			} catch (err) {
-				vscode.window.showErrorMessage('Error')
+				vscode.window.showErrorMessage('Error');
 			}
 		})
 	);
@@ -72,12 +72,10 @@ export function activate(context: vscode.ExtensionContext) {
 
 	//Mark placeholder text
 	let activeEditor = vscode.window.activeTextEditor;
-	if (activeEditor){
-		triggerUpdateDecorations();
-	}
+
 	vscode.window.onDidChangeActiveTextEditor(editor => {
 		activeEditor = editor;
-		if (editor) {
+		if (activeEditor) {
 			triggerUpdateDecorations();
 		}
 	}, null, context.subscriptions);
@@ -85,9 +83,13 @@ export function activate(context: vscode.ExtensionContext) {
 	vscode.workspace.onDidChangeTextDocument(event => {
 		if (activeEditor && event.document === activeEditor.document) {
 			triggerUpdateDecorations(true);
+			deletePlaceHolder(event);
 		}
 	}, null, context.subscriptions);
+
+	if (activeEditor){
+		triggerUpdateDecorations();
+	}
 }
 
-// This method is called when your extension is deactivated
 export function deactivate() {}

@@ -19,33 +19,57 @@ const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
     }
 });
 
+let decorations: vscode.DecorationOptions[] = [];
+
 export function updateDecorations() {
+    decorations = [];
     if (!activeEditor) {
         return;
     }
     const regEx = /--.*--/g;
     const text = activeEditor.document.getText();
-    const smallNumbers: vscode.DecorationOptions[] = [];
-    const largeNumbers: vscode.DecorationOptions[] = [];
     let match;
     while ((match = regEx.exec(text))) {
         const startPos = activeEditor.document.positionAt(match.index);
         const endPos = activeEditor.document.positionAt(match.index + match[0].length);
-        const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Number **' + match[0] + '**' };
-        smallNumbers.push(decoration);
+        const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Fill in this section with your documentaiton' };
+        decorations.push(decoration);
     }
-    activeEditor.setDecorations(smallNumberDecorationType, smallNumbers);
+    activeEditor.setDecorations(smallNumberDecorationType, decorations);
 }
 
 export function triggerUpdateDecorations(throttle = false) {
+    activeEditor = vscode.window.activeTextEditor;
+    if(activeEditor?.document.languageId !== 'markdown'){
+        return;
+    }
     if (timeout) {
         clearTimeout(timeout);
         timeout = undefined;
     }
     if (throttle) {
-        console.log("throttle");
-        timeout = setTimeout(updateDecorations, 500);
+        timeout = setTimeout(updateDecorations, 100);
     } else {
         updateDecorations();
     }
+}
+
+export function deletePlaceHolder(event: vscode.TextDocumentChangeEvent) {
+    const changes = event.contentChanges;
+    changes.forEach(change => {
+        decorations.forEach(decoration => {
+            const decorationRange = decoration.range;
+            if ((decorationRange.contains(change.range.start) || decorationRange.contains(change.range.end)) && activeEditor) {
+                const deleteEnd = decorationRange.end.translate(0, 1);
+                const deleteRange = new vscode.Range(decorationRange.start, deleteEnd);
+                activeEditor.edit(editBuilder => {
+                    editBuilder.delete(deleteRange);
+                });
+                const removePlaceholder = decorations.indexOf(decoration);
+                if(removePlaceholder !== -1){
+                    decorations.splice(removePlaceholder, 1);
+                }
+            }
+        });
+    });
 }
