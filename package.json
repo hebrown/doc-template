@@ -22,19 +22,23 @@
       },
       {
         "command": "template.gettingstarted",
-        "title": "Getting Started"
+        "title": "Getting Started",
+        "enablement": "inQuickOpen != true"
       },
       {
         "command": "template.howto",
-        "title": "How-to"
+        "title": "How-to",
+        "enablement": "inQuickOpen != true"
       },
       {
         "command": "template.faq",
-        "title": "FAQ"
+        "title": "FAQ",
+        "enablement": "inQuickOpen != true"
       },
       {
         "command": "template.developerguide",
-        "title": "Developer Guide"
+        "title": "Developer Guide",
+        "enablement": "inQuickOpen != true"
       }
     ],
     "menus": {
