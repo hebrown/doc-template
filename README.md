@@ -4,10 +4,14 @@ Work in progress VSCode extension to add documentation templates pulled from a t
 
 ## Features
 
-* Command palette option to choose a template and add it to a specified location
-* Codelens prompt to insert template content into an empty markdown file
-* Additional option in the context menu when right-clicking in the explorer to choose a template and add it to a folder
-* Decorates and automatically deletes when a user types anywhere in a placeholder text chunk
+#### Command palette option to choose a template and add it to a specified location
+<img src="/images/template_command.gif"/>
+#### Codelens prompt to insert template content into an empty markdown file
+<img src="/images/template_lens.gif"/>
+#### Additional option in the context menu when right-clicking in the explorer to choose a template and add it to a folder
+<img src="/images/template_context.gif"/>
+#### Decorates and automatically deletes when a user types anywhere in a placeholder text chunk
+<img src="/images/template_placeholder.gif"/>
 
 ## Requirements
 
