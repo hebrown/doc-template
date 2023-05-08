@@ -18,7 +18,8 @@
     "commands": [
       {
         "command": "template.showTemplates",
-        "title": "Choose a Template"
+        "title": "Choose a Template",
+        "category": "Doc Templates"
       },
       {
         "command": "template.gettingstarted",
