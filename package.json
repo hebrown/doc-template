@@ -45,7 +45,7 @@
       "explorer/context": [
         {
           "submenu": "template.template",
-          "group": "navigation",
+          "group": "z_commands",
           "when": "explorerResourceIsFolder && explorerResourceIsRootFolder != true"
         }
       ],
