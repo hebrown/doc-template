@@ -1,6 +1,8 @@
 import * as vscode from 'vscode';
 import { exec } from 'child_process';
 
+//Inserts content of template files as a snippet into the current active editor
+//This command is called from a codeLens prompt
 export async function insertTemplate(template: string){
     const templateContent = await retrieveTemplate(template)
     const snippet = new vscode.SnippetString(templateContent);

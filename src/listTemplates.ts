@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import { exec } from 'child_process';
 
+//Lists templates for selection in the quick pick menu from the command palette
 export async function listTemplates() {
     const templateContent = await retrieveListTemplates()
     const templateList = vscode.window.showQuickPick(templateContent)

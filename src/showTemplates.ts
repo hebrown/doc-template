@@ -1,14 +1,10 @@
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path'
 
 import { addFile } from './addTemplate';
-import { FileAutocompleteProvider } from './fileAutocompleteProvider';
 
-
+//Prompt for selecting destination folder after a template is chosen from the command palette
 export async function showTemplates(template: string, context: vscode.ExtensionContext) {
     
-    const fileAutocompleteProvider = new FileAutocompleteProvider
 	try {
         const destinationPath = await vscode.window.showInputBox({
             prompt: 'Enter the destination path for the new file:',

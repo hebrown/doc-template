@@ -6,6 +6,7 @@ import {
     Command
   } from "vscode";
 
+//Provides the codeLens prompt that inserts a snippet with selected template content
 export class TemplateCodeLens implements CodeLensProvider{
     private regex: RegExp;
 
@@ -14,12 +15,11 @@ export class TemplateCodeLens implements CodeLensProvider{
 	}
 
     async provideCodeLenses(document: TextDocument): Promise<CodeLens[]> {
-            // Define where the CodeLens will exist
+        // Define where the CodeLens will exist
         let topOfDocument = new Range(0, 0, 0, 0);
         const text = document.getText();
         const contentAdded = text.length > 0;
 
-        // Define what command we want to trigger when activating the CodeLens
         let c: Command = {
         command: "template.insertSnippet",
         title: "Choose a template"
