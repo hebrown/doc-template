@@ -4,23 +4,15 @@ let timeout: NodeJS.Timer | undefined = undefined;
 
 let activeEditor = vscode.window.activeTextEditor;
 
-const smallNumberDecorationType = vscode.window.createTextEditorDecorationType({
-    borderWidth: '1px',
-    borderStyle: 'solid',
-    overviewRulerColor: 'blue',
-    overviewRulerLane: vscode.OverviewRulerLane.Right,
-    light: {
-        // this color will be used in light color themes
-        borderColor: 'darkblue'
-    },
-    dark: {
-        // this color will be used in dark color themes
-        borderColor: 'lightblue'
-    }
+//Provides style for decorated text
+const templateDecorationType = vscode.window.createTextEditorDecorationType({
+    fontStyle: 'italic',
+    color: 'gray'
 });
 
 let decorations: vscode.DecorationOptions[] = [];
 
+//Decorates placeholder text
 export function updateDecorations() {
     decorations = [];
     if (!activeEditor) {
@@ -35,9 +27,10 @@ export function updateDecorations() {
         const decoration = { range: new vscode.Range(startPos, endPos), hoverMessage: 'Fill in this section with your documentaiton' };
         decorations.push(decoration);
     }
-    activeEditor.setDecorations(smallNumberDecorationType, decorations);
+    activeEditor.setDecorations(templateDecorationType, decorations);
 }
 
+//Updates decorated text on edit or active editor change
 export function triggerUpdateDecorations(throttle = false) {
     activeEditor = vscode.window.activeTextEditor;
     if(activeEditor?.document.languageId !== 'markdown'){
@@ -54,6 +47,7 @@ export function triggerUpdateDecorations(throttle = false) {
     }
 }
 
+//Deletes placeholder text when an edit occurs within a placeholder text block
 export function deletePlaceHolder(event: vscode.TextDocumentChangeEvent) {
     const changes = event.contentChanges;
     changes.forEach(change => {
