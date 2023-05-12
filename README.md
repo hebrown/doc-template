@@ -11,8 +11,8 @@ Work in progress VSCode extension to add documentation templates pulled from a t
 ![codelens](images/codelens.gif)
 #### Additional option in the context menu when right-clicking in the explorer to choose a template and add it to a folder
 ![context](images/context.gif)
-#### Decorates and automatically deletes when a user types anywhere in a placeholder text chunk
-![placeholder](images/placeholder.gif)
+#### Decorates and automatically selects template placeholder text
+![placeholder](images/selectText.gif)
 
 ## Requirements
 
