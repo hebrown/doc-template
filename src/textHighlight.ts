@@ -13,7 +13,7 @@ const templateDecorationType = vscode.window.createTextEditorDecorationType({
 let decorations: vscode.DecorationOptions[] = [];
 
 //Decorates placeholder text
-export function updateDecorations() {
+function updateDecorations() {
     decorations = [];
     if (!activeEditor) {
         return;
@@ -47,22 +47,16 @@ export function triggerUpdateDecorations(throttle = false) {
     }
 }
 
-//Deletes placeholder text when an edit occurs within a placeholder text block
-export function deletePlaceHolder(event: vscode.TextDocumentChangeEvent) {
-    const changes = event.contentChanges;
-    changes.forEach(change => {
+//Selects entire placeholder text chunk when user clicks anywhere within the chunk
+export function deleteSelection(event: vscode.TextEditorSelectionChangeEvent){
+    console.log(event.textEditor.document.fileName);
+    const selections = event.selections;
+    selections.forEach(selection => {
         decorations.forEach(decoration => {
             const decorationRange = decoration.range;
-            if ((decorationRange.contains(change.range.start) || decorationRange.contains(change.range.end)) && activeEditor) {
-                const deleteEnd = decorationRange.end.translate(0, 1);
-                const deleteRange = new vscode.Range(decorationRange.start, deleteEnd);
-                activeEditor.edit(editBuilder => {
-                    editBuilder.delete(deleteRange);
-                });
-                const removePlaceholder = decorations.indexOf(decoration);
-                if(removePlaceholder !== -1){
-                    decorations.splice(removePlaceholder, 1);
-                }
+            if ((decorationRange.contains(selection.start) || decorationRange.contains(selection.end)) && activeEditor) {
+                const placeholderSelection = new vscode.Selection(decorationRange.start, decorationRange.end);
+                activeEditor.selection = placeholderSelection;
             }
         });
     });

@@ -4,7 +4,7 @@ import * as vscode from 'vscode';
 import { TemplateCodeLens } from './templateCodeLens';
 import { showTemplates } from './showTemplates';
 import { addFile } from './addTemplate';
-import { deletePlaceHolder, triggerUpdateDecorations, updateDecorations } from './textHighlight';
+import { deleteSelection, triggerUpdateDecorations } from './textHighlight';
 import { insertTemplate } from './insertTemplate';
 import { listTemplates } from './listTemplates';
 
@@ -80,16 +80,23 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 	}, null, context.subscriptions);
 
-	vscode.workspace.onDidChangeTextDocument(event => {
-		if (activeEditor && event.document === activeEditor.document) {
-			triggerUpdateDecorations(true);
-			deletePlaceHolder(event);
-		}
-	}, null, context.subscriptions);
-
 	if (activeEditor){
 		triggerUpdateDecorations();
 	}
+
+	vscode.workspace.onDidChangeTextDocument(event => {
+		if (activeEditor && event.document === activeEditor.document) {
+			triggerUpdateDecorations(true);
+		}
+	}, null, context.subscriptions);
+
+	vscode.window.onDidChangeTextEditorSelection(event => {
+		if (activeEditor && event.textEditor.document === activeEditor.document) {
+			setTimeout(() => {
+				deleteSelection(event);
+			}, 100);
+		}
+	}, null, context.subscriptions);
 }
 
 export function deactivate() {}
