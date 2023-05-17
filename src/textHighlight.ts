@@ -49,7 +49,6 @@ export function triggerUpdateDecorations(throttle = false) {
 
 //Selects entire placeholder text chunk when user clicks anywhere within the chunk
 export function deleteSelection(event: vscode.TextEditorSelectionChangeEvent){
-    console.log(event.textEditor.document.fileName);
     const selections = event.selections;
     selections.forEach(selection => {
         decorations.forEach(decoration => {

@@ -47,6 +47,11 @@ export function activate(context: vscode.ExtensionContext) {
 			addFile(resource, "developerguide", context);
 		})
 	);
+	context.subscriptions.push(
+		vscode.commands.registerCommand('template.contributing', (resource: vscode.Uri) =>{
+			addFile(resource, "CONTRIBUTING", context);
+		})
+	);
 
 	//Codelens prompt to insert snippet
 	context.subscriptions.push(

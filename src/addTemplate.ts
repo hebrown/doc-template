@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as path from 'path';
 import { exec } from 'child_process';
+import { linkFile } from './linkContributing';
 
 //Uses GH CLI extension to add a new file to the repository
 //After file is added, view switches to the newly created file
@@ -26,4 +27,8 @@ export async function addFile(resource: vscode.Uri, template: string, context: v
   const createdFile = path.join(filePath, templateFile);
   const document = await vscode.workspace.openTextDocument(createdFile);
   vscode.window.showTextDocument(document);
+  if(template === "CONTRIBUTING"){
+    const newFileTitle = document.lineAt(0).text.trim();
+    linkFile(document);
+  }
 }

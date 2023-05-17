@@ -40,6 +40,11 @@
         "command": "template.developerguide",
         "title": "Developer Guide",
         "enablement": "inQuickOpen != true"
+      },
+      {
+        "command": "template.contributing",
+        "title": "CONTRIBUTING",
+        "enablement": "inQuickOpen != true"
       }
     ],
     "menus": {
@@ -62,6 +67,9 @@
         },
         {
           "command": "template.developerguide"
+        },
+        {
+          "command": "template.contributing"
         }
       ]
     },
