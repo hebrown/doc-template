@@ -1,0 +1,11 @@
+name: GHA Reusable Demo
+run-name: Testing reusable
+on:
+  workflow_call:
+  pull_request:
+
+jobs:
+  Test-Reusable:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Testing reusable"
