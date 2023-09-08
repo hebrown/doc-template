@@ -17,13 +17,13 @@ jobs:
       - name: Find Docusaurus directory
         id: find-docs-dir
         run: |
-          git fetch origin ${{ github.base_ref }} --depth=1
-          DOC_DIRS=$(git grep -l 'docusaurus.config.js' origin/${{ github.base_ref }} | xargs -n 1 dirname | sort -u)
+          DOC_DIRS=$(git ls-files '**/docusaurus.config.js' | xargs -n 1 dirname | sort -u)
           echo "::set-output name=docs_dir::$DOC_DIRS"
 
       - name: Check for changes in Docusaurus directory
         id: check-changes
         run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
           DOCS_DIR="${{ steps.find-docs-dir.outputs.docs_dir }}"
           FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }})
           SHOULD_RUN="false"
