@@ -1,11 +1,47 @@
-name: GHA Reusable Demo
-run-name: Testing reusable
-on:
-  workflow_call:
+name: Reusable Docs Workflow
+
+on: 
   pull_request:
 
 jobs:
-  Test-Reusable:
+  check_changes:
     runs-on: ubuntu-latest
+    outputs:
+      docs_dir: ${{ steps.find-docs-dir.outputs.docs_dir }}
+      should_run: ${{ steps.check-changes.outputs.should_run }}
+
     steps:
-      - run: echo "Testing reusable"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Find Docusaurus directory
+        id: find-docs-dir
+        run: |
+          git fetch origin ${{ github.base_ref }} --depth=1
+          DOC_DIRS=$(git grep -l 'docusaurus.config.js' origin/${{ github.base_ref }} | xargs -n 1 dirname | sort -u)
+          echo "::set-output name=docs_dir::$DOC_DIRS"
+
+      - name: Check for changes in Docusaurus directory
+        id: check-changes
+        run: |
+          DOCS_DIR="${{ steps.find-docs-dir.outputs.docs_dir }}"
+          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }})
+          SHOULD_RUN="false"
+          for FILE in $FILES_CHANGED; do
+            for DIR in $DOCS_DIR; do
+              if [[ "$FILE" == "$DIR/"* ]]; then
+                SHOULD_RUN="true"
+                break 2
+              fi
+            done
+          done
+          echo "::set-output name=should_run::$SHOULD_RUN"
+
+  your_job:
+    needs: [check_changes]
+    if: needs.check_changes.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Your Step Name
+        run: echo "Running your job as there were changes in the Docusaurus directory"
