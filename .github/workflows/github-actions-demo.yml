@@ -5,9 +5,5 @@ on:
 
 jobs:
   Explore-GitHub-Actions:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Call reusable
-        uses: ./.github/workflows/test-reusable
+    uses: ./.github/workflows/test-reusable
       
