@@ -16,26 +16,18 @@ jobs:
 
       - name: Find Docusaurus directory
         id: find-docs-dir
+        shell: bash
         run: |
-          DOC_DIRS=$(git ls-files '**/docusaurus.config.js' | xargs -n 1 dirname | sort -u)
-          echo "::set-output name=docs_dir::$DOC_DIRS"
+          doc_dir=$(find . -name "docusaurus.config.js" -exec dirname {} \;)
+          echo "docs_dir=$doc_dir" >> "$GITHUB_OUTPUT"
 
       - name: Check for changes in Docusaurus directory
         id: check-changes
-        run: |
-          git fetch origin ${{ github.base_ref }} --depth=1
-          DOCS_DIR="${{ steps.find-docs-dir.outputs.docs_dir }}"
-          FILES_CHANGED=$(git diff --name-only origin/${{ github.base_ref }})
-          SHOULD_RUN="false"
-          for FILE in $FILES_CHANGED; do
-            for DIR in $DOCS_DIR; do
-              if [[ "$FILE" == "$DIR/"* ]]; then
-                SHOULD_RUN="true"
-                break 2
-              fi
-            done
-          done
-          echo "::set-output name=should_run::$SHOULD_RUN"
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            should_run:
+              - '${{ steps.find-docs-dir.outputs.docs_dir }}/**'
 
   your_job:
     needs: [check_changes]
