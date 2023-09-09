@@ -8,5 +8,5 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
-        uses: test-reusable.yaml@v0
+        uses: ./.github/workflows/test-reusable
       
