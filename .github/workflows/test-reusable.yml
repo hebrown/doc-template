@@ -28,6 +28,7 @@ jobs:
           filters: |
             should_run:
               - '${{ steps.find-docs-dir.outputs.docs_dir }}/**'
+          token: ''
 
   your_job:
     needs: [check_changes]
