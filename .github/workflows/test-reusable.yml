@@ -39,6 +39,10 @@ jobs:
             has_diff=true
           fi
 
+          if [[ ${{ steps.find-docs-dir.outputs.docs_dir }} == "." ]]; then
+            has_diff=true
+          fi
+
           echo "should_run=$has_diff" >> "$GITHUB_OUTPUT"
 
   your_job:
