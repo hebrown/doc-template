@@ -28,6 +28,8 @@ jobs:
         run: |
           diff=$(git diff --name-only HEAD^ HEAD)
 
+          echo "$diff"
+
           # Check if a file under docs/ or with the .md extension has changed (added, modified, deleted)
           source_diff=$(echo "$diff" | grep -E '^${{ steps.find-docs-dir.outputs.docs_dir }}/' || true)
           has_diff=false
