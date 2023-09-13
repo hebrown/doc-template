@@ -21,6 +21,7 @@ jobs:
         shell: bash
         run: |
           doc_dir=$(find . -name "docusaurus.config.js" -exec dirname {} \; | sed 's|^\./||')
+          echo "$doc_dir"
           echo "docs_dir=$doc_dir" >> "$GITHUB_OUTPUT"
 
       - name: Check for changes in Docusaurus directory
